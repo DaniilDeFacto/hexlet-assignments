@@ -15,7 +15,6 @@ public class App {
             throw new RuntimeException(e);
         }
     }
-
     
     public static Car extract(Path path) {
         try {
