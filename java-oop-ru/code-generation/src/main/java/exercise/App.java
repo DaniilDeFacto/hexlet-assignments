@@ -16,6 +16,7 @@ public class App {
         }
     }
 
+    
     public static Car extract(Path path) {
         try {
             String jsonRepresentation = Files.readString(path);
