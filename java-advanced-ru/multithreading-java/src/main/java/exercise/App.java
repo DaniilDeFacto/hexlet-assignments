@@ -1,6 +1,7 @@
 package exercise;
 
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 class App {
@@ -8,21 +9,32 @@ class App {
 
     // BEGIN
     public static Map<String, Integer> getMinMax(int[] numbers) {
-        MaxThread maxThread = new MaxThread(numbers);
+
         MinThread minThread = new MinThread(numbers);
-        maxThread.start();
+        MaxThread maxThread = new MaxThread(numbers);
+
         minThread.start();
-        try {
-            maxThread.join();
-        } catch (InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        LOGGER.log(Level.INFO, "Thread " + minThread.getName() + " started");
+        maxThread.start();
+        LOGGER.log(Level.INFO, "Thread " + maxThread.getName() + " started");
+
         try {
             minThread.join();
+            LOGGER.log(Level.INFO, "Thread " + minThread.getName() + " finished");
+            maxThread.join();
+            LOGGER.log(Level.INFO, "Thread " + maxThread.getName() + " finished");
         } catch (InterruptedException e) {
-            throw new RuntimeException(e);
+            System.out.println("Поток был прерван");
         }
-        return Map.of("min", minThread.getResult(), "max", maxThread.getResult());
+
+        Map<String, Integer> result = Map.of(
+                "min", minThread.getResult(),
+                "max", maxThread.getResult()
+        );
+
+        LOGGER.log(Level.INFO, "Result: " + result);
+
+        return result;
     }
     // END
 }
